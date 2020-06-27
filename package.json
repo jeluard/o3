@@ -1,0 +1,19 @@
+{
+  "name": "getting-started-babylonjs-typescript",
+  "version": "1.0.0",
+  "description": "This example is from the documentation: https://doc.babylonjs.com/",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html"
+  },
+  "dependencies": {
+    "babylonjs": "4.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.2.0",
+    "parcel-bundler": "1.12.4",
+    "typescript": "3.9.5"
+  },
+  "keywords": []
+}
