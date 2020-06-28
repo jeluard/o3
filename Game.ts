@@ -16,7 +16,7 @@ export default class Game
         this._engine = new BABYLON.Engine(this._canvas, true);
 
         // Create a basic BJS Scene object.
-        const scene = new BABYLON.Scene(this._engine);
+        this._scene = new BABYLON.Scene(this._engine);
 
         // Create a FreeCamera, and set its position to (x:0, y:5, z:-10).
         this._camera = new BABYLON.FreeCamera(
