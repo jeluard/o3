@@ -1,19 +1,26 @@
 {
-  "name": "getting-started-babylonjs-typescript",
+  "name": "o3",
   "version": "1.0.0",
   "description": "This example is from the documentation: https://doc.babylonjs.com/",
-  "main": "index.html",
+  "app": "dist/index.html",
+  "browserslist": "> 0.2%",
   "scripts": {
-    "dev": "parcel index.html --open",
-    "build": "parcel build index.html"
+    "clean": "rm -rf yarn.lock node_modules/ dist/",
+    "dev": "parcel assets/index.html --open",
+    "build": "parcel build assets/index.html "
   },
   "dependencies": {
     "babylonjs": "4.1.0"
   },
   "devDependencies": {
-    "@babel/core": "7.2.0",
-    "parcel-bundler": "1.12.4",
-    "typescript": "3.9.5"
+    "parcel": "2.0.0-beta.1",
+    "typescript": "4.1.0-beta"
   },
-  "keywords": []
+  "targets": {
+    "app": {
+      "engines": {
+        "browsers": "> 0.25%"
+      }
+    }
+  }
 }
