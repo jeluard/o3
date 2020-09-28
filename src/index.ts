@@ -1,8 +1,19 @@
 import * as BABYLON from "babylonjs";
 import { WebXRControllerComponent } from "babylonjs";
+import * as Tone from 'tone'
+
+const synth = new Tone.Synth().toDestination();
 
 async function createScene(engine, canvas) {
   const scene = new BABYLON.Scene(engine);
+    scene.onPointerObservable.add((e)=>{
+      if(e.type == BABYLON.PointerEventTypes.POINTERDOWN){
+          console.log(e.pickInfo.pickedMesh.id);
+          
+          synth.triggerAttackRelease("C4", "8n");
+      }
+  })
+  scene.enablePhysics(undefined, new BABYLON.AmmoJSPlugin());
   const sessionManager = new BABYLON.WebXRSessionManager(scene);
   const camera = new BABYLON.FreeCamera(//WebXRCamera
     "camera1",
@@ -21,10 +32,11 @@ async function createScene(engine, canvas) {
   const sphere = BABYLON.Mesh.CreateSphere("sphere1", 16, 2, scene);
   sphere.position.y = 2;
   sphere.position.z = 5;
+  sphere.onCollideObservable.add(() => console.log);
 
   const env = scene.createDefaultEnvironment();
   const xr = await scene.createDefaultXRExperienceAsync({
-    floorMeshes: [env.ground],
+    //floorMeshes: [env.ground],
     uiOptions: {
       sessionMode: "immersive-vr",
     },
@@ -35,12 +47,15 @@ async function createScene(engine, canvas) {
 // WebXR:
 const input = xr.input; // if using the experience helper, otherwise, an instance of WebXRInput
 input.onControllerAddedObservable.add((xrController /* WebXRInputSource instance */ ) => {
+  console.log("controller", xrController)
     // more fun with the new controller, since we are in XR!
     xrController.onMotionControllerInitObservable.add((motionController) => {
+      console.log( motionController.getComponentIds())
       const mainComponent = xrController.motionController.getMainComponent();
       // or get the trigger component, if present:
       const mainTrigger = xrController.motionController.getComponent(WebXRControllerComponent.TRIGGER_TYPE);
       mainComponent.onButtonStateChangedObservable.add((component /* WebXRControllerComponent */ ) => {
+        console.log("button", component)
           // check for changes:
           // pressed changed?
           if (component.changes.pressed) {
