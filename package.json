@@ -13,10 +13,10 @@
   "scripts": {
     "clean": "rm -rf yarn.lock node_modules/ dist/",
     "dev": "parcel assets/index.html --open",
-    "build": "parcel build assets/index.html "
+    "build": "parcel build assets/index.html  --public-url ./"
   },
   "dependencies": {
-    "babylonjs": "4.1.0"
+    "babylonjs": "4.2.0-beta.5"
   },
   "devDependencies": {
     "parcel": "2.0.0-beta.1",

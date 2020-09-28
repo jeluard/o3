@@ -1,11 +1,14 @@
 import * as BABYLON from "babylonjs";
+import { WebXRControllerComponent } from "babylonjs";
 
 async function createScene(engine, canvas) {
   const scene = new BABYLON.Scene(engine);
-  const camera = new BABYLON.FreeCamera(
+  const sessionManager = new BABYLON.WebXRSessionManager(scene);
+  const camera = new BABYLON.FreeCamera(//WebXRCamera
     "camera1",
     new BABYLON.Vector3(0, 5, -10),
-    scene
+    scene,
+    //sessionManager
   );
   camera.setTarget(BABYLON.Vector3.Zero());
   camera.attachControl(canvas, true);
@@ -19,12 +22,53 @@ async function createScene(engine, canvas) {
   sphere.position.y = 2;
   sphere.position.z = 5;
 
+  const env = scene.createDefaultEnvironment();
   const xr = await scene.createDefaultXRExperienceAsync({
+    floorMeshes: [env.ground],
     uiOptions: {
-      sessionMode: "immersive-ar",
+      sessionMode: "immersive-vr",
     },
+    optionalFeatures: true
   });
   console.log(xr)
+
+// WebXR:
+const input = xr.input; // if using the experience helper, otherwise, an instance of WebXRInput
+input.onControllerAddedObservable.add((xrController /* WebXRInputSource instance */ ) => {
+    // more fun with the new controller, since we are in XR!
+    xrController.onMotionControllerInitObservable.add((motionController) => {
+      const mainComponent = xrController.motionController.getMainComponent();
+      // or get the trigger component, if present:
+      const mainTrigger = xrController.motionController.getComponent(WebXRControllerComponent.TRIGGER_TYPE);
+      mainComponent.onButtonStateChangedObservable.add((component /* WebXRControllerComponent */ ) => {
+          // check for changes:
+          // pressed changed?
+          if (component.changes.pressed) {
+              // is it pressed?
+              if (component.changes.pressed.current === true) {
+                  // pressed
+              }
+              // or a different way:
+              if (component.pressed) {
+                  // component is pressed.
+              }
+          }
+      });
+          // in webXR you can check if it is present and work accordingly:
+    const thumbstick = xrController.motionController.getComponent(WebXRControllerComponent.THUMBSTICK_TYPE);
+    if (thumbstick) {
+        // Huzza! we have a thumbstick:
+        thumbstick.onButtonStateChangedObservable // will trigger when the thumbstick is PRESSED or touched!
+
+        thumbstick.onAxisValueChangedObservable // will trigger when axes of the thumbstick changed
+    }
+    });
+    // xr supports all types of inputs, so some won't have a motion controller
+    if (!xrController.motionController) {
+        // using touch, hands, gaze, something else?
+    }
+
+});
 
   return scene;
 };
