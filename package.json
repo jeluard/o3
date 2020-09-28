@@ -16,7 +16,8 @@
     "build": "parcel build assets/index.html  --public-url ./"
   },
   "dependencies": {
-    "babylonjs": "4.2.0-beta.5"
+    "babylonjs": "4.2.0-beta.5",
+    "tone": "14.7.60"
   },
   "devDependencies": {
     "parcel": "2.0.0-beta.1",
